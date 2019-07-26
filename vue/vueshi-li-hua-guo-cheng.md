@@ -71,7 +71,7 @@ function resolveConstructorOptions (Ctor: Class<Component>) {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-再通过mergeOptions函数进行选项动态合并。从代码中可以看到，对自定义选项中的extends和mixins字段会进行递归合并。其中又涉及到不同属性值的合并策略问题，比如data、props、methods、watch、声明周期钩子函数等等。详情参见[深入Vue属性合并策略](shen-ru-vue-shu-xing-he-bing-ce-lve.md)。
+再通过mergeOptions函数进行选项动态合并。从代码中可以看到，对自定义选项中的extends和mixins字段会进行递归合并。其中又涉及到不同属性值的合并策略问题，比如data、props、methods、watch、声明周期钩子函数等等。详情参见[深入Vue属性合并策略](shen-ru-vue-shu-xing-he-bing-ce-lve/)。
 
 {% code-tabs %}
 {% code-tabs-item title="src/core/util/options.js" %}

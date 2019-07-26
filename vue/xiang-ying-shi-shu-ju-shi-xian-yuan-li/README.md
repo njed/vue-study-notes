@@ -385,7 +385,7 @@ export default class Watcher {
 
 ### Watcher更新队列
 
-上一小节贴出的Watcher源码中如果仔细看update函数，会发现如果状态lazy为真的话，内部只是把dirty标记为true而已，并没有做任何别的事情，这个场景是和computed配合使用的；第二种情况是状态sync为真则直接调用run函数，run函数是真正执行计算和调用回调函数的地方；重点看下不满足上述两种的情况的时候其实是使用了队列来实现更新操作的。
+上一小节贴出的Watcher源码中如果仔细看update函数，会发现如果状态lazy为真的话，内部只是把dirty标记为true而已，并没有做任何别的事情，这个场景是和computed配合使用的；第二种情况是状态sync为真则直接调用run函数，run函数是真正执行计算和调用回调函数的地方；重点看下不满足上述两种的情况的时候其实是使用了队列来实现更新操作的。Vue的Watcher更新队列详情参考：Watcher更新队列章节。
 
 {% code-tabs %}
 {% code-tabs-item title="src/core/observer/watcher.js" %}
