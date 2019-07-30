@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Introduction](README.md)
+* [简介](README.md)
 * [搭建前端工程](da-jian-qian-duan-gong-cheng/README.md)
   * [使用脚手架](da-jian-qian-duan-gong-cheng/jiao-shou-jia.md)
 * [Vue全家桶实战](vuequan-jia-tong-shi-zhan.md)
@@ -18,6 +18,10 @@
     * [inject](vue/shen-ru-vue-shu-xing-he-bing-ce-lve/inject.md)
   * [组件实例化过程](vue/vueshi-li-hua-guo-cheng.md)
   * [响应式数据实现原理](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/README.md)
+    * [Watcher类](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/watcher-lei.md)
+    * [侦听器（watch）](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/jian-ting-qi-watch.md)
+    * [计算属性（computed）](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/ji-suan-shu-xing-computed.md)
+    * [组件渲染侦听器](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/zu-jian-xuan-ran-zhen-ting-qi.md)
     * [Vue依赖收集详解](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/vue-yi-lai-shou-ji-xiang-jie.md)
     * [Watcher更新队列](vue/xiang-ying-shi-shu-ju-shi-xian-yuan-li/watcher-geng-xin-dui-lie.md)
   * [Vue之VNode浅析](vue/vue-zhi-vnode-qian-xi.md)

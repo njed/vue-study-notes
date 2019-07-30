@@ -1,21 +1,26 @@
+---
+description: 学习和分析Vue内部的响应式数据的实现原理和相关知识点，以及相关设计模式和编程思想。
+---
+
 # 响应式数据实现原理
 
-Vue的核心响应式数据，并动态改变ui呈现。看起来非常高大上，我们只需要改变属性值，Vue就主动帮我们完成了剩下的工作，回想jquery盛行时期，当时的我们还需要手动去操作dom。那前端的下一次技术进化会是什么呢？
+> 响应式数据是Vue 最独特的特性之一，是其非侵入性的响应式系统。数据模型仅仅是普通的 JavaScript 对象。而当你修改它们时，视图会进行更新。
 
-### 如果我们要实现一个类Vue的响应式数据，我们应该怎么实现呢？
+非侵入式、普通的对象模型、动态更新试图，这些特性看起来非常的高大上，得益于Vue的强大响应式系统，减少了很多平常开发中的繁琐处理。把关注点从dom转移到了数据上，我们只需要维护数据状态，Vue就主动帮我们完成了剩下的工作。回想jquery盛行时期，当时的我们还需要手动去操作dom。那前端的下一次技术进化会是什么呢？
 
-我们大致可以从以下几个方面进行思考？
+### 实现响应式数据的关键技术点
 
-1. 对数据进行拦截代理；
-2. 收集数据依赖项；
-3. 数据变化通知依赖项；
-4. 依赖项动态改变dom完成更新操作；
+我们大致可以从以下几个方面进行思考和入手？
 
-知道了实现响应式数据的大致技术点之后，是不是觉得响应式数据也不是很神秘嘛！程序员的一个通病就是没动手之前都觉得问题很简单，开始编码之后要考虑各种细节了，突然觉得好难哦。言归正传，对于上述技术点我们就要考虑怎么对第三方数据进行拦截代理？又怎么收集依赖项等等，下面我们就Vue源码进行分析，看下大牛们是怎么思考和实现的。
+1. 如何对数据进行代理拦截？
+2. 如何维护网状的关联关系？
+3. 如何高性能的更新组件？
 
-### 通过存取描述符对数据进行拦截代理
+如果能够想明白上述的三个问题，其实大概也能实现一个响应式系统，下面就从Vue源码出发u 学习和分析下实现细节，学习下大牛们的编程思想。
 
-还记得Object.defineProperty\(\)方法吗，Vue3之前的版本正是基于属性存取描述符的get和set实现的（这里我们需要复习一下“[属性描述符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)”）,并在get函数中完成依赖收集\(depend\)和在set函数中触发更新通知\(notify\)。
+### 通过存取描述符对数据进行代理拦截
+
+还记得Object.defineProperty\(\)方法吗，Vue3之前的版本代理拦截操作正是基于属性存取描述符的get和set实现的（这里我们需要复习一下“[属性描述符](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)”）,并在get函数中完成依赖收集\(depend\)并在set函数中触发更新通知\(notify\)。
 
 思考：如何避免不必要的依赖收集？
 
@@ -86,16 +91,30 @@ export function defineReactive (
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-Vue3应该会采用新规范的Proxy实现数据的拦截代理，据说Proxy在性能比采用属性存取描述符有大幅的提升。让我们一起期待Vue3的到来吧！
+总结一下defineReactive函数的作用：
 
-### 依赖收集：Dep类
+* 每个被观察的属性都会形成一个闭包；
+* 每个被观察的属性对应个一个Dep对象；
+* 依赖收集是动态的，只有在真正使用到时才会进行依赖绑定；
+* 重新赋值的时候会对属性值添加观察（如果有必要）；
 
-首先要知道在Vue中哪些数据会被代理，在编写Vue组件时，组件内部维护的数组包括自身data、外部传入的props以及vuex维护的数据，我们这里排除vuex那就剩下data和props了。Vue内部会遍历data和props对象，对属性defineReactive函数对每个属性进行代理。
+Vue3应该会采用新规范的Proxy实现数据的代理拦截，Proxy在性能比采用属性存取描述符有大幅的提升。让我们一起期待Vue3的到来吧！
 
-在Vue内部使用Dep类表示依赖，在Vue中每个被代理的属性都对应一个Dep对象，每个Dep对象内又保存了一个Watcher数组，在上述get函数中通过Dep对象的depend\(\)函数，双向绑定Dep和Watcher对象。从Dep类的设计上能明显的看出这是一个观察者模式的实现，当属性改变时通过Dep对象去通知Watcher对象进行更新操作。
+### 依赖收集：Dep类和Watcher类
 
-* data的每个属性对应一个Dep对象
-* props的每个属性对应一个Dep对象；
+首先要弄明白几个概念：观察者和被观察者。
+
+被观察者：数据源，如：data和props；
+
+观察者：依赖于这些数据源动态改变和计算的选项。如：watch和computed；
+
+在Vue中观察者和被观察者是多对多的数据模型，每个数据源的属性都会对应一个Dep对象，每个观察者都会对应一个Watcher对象。
+
+#### 依赖项：Dep类
+
+首先要知道在Vue中哪些数据会被代理，Vue组件的$attrs和$listeners以及用户自定义属性data和props。Vue会对以上对象进行遍历，通过defineReactive函数对每个属性进行代理拦截。
+
+在Vue内部使用Dep类表示依赖，每个被代理的属性都对应一个Dep对象，每个Dep对象内又保存了一个Watcher数组，在上述get函数中通过Dep对象的depend\(\)函数，双向绑定Dep和Watcher对象。从Dep类的设计上能明显的看出这是一个观察者模式的实现，当属性改变时通过Dep对象去通知Watcher对象进行更新操作。
 
 {% code-tabs %}
 {% code-tabs-item title="src/core/observer/dep.js" %}
@@ -142,16 +161,16 @@ export default class Dep {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-### 依赖收集：Watcher类
+#### 依赖收集：Watcher类
 
-Vue中的Watcher类用于解析表达式、收集依赖、当依赖项变化时触发回调。最应该想到的就是常用的watch和computed，他们都是通过对应的Watcher对象来维护依赖项和重新计算值的。具体对应关系如下：
+Vue中的Watcher类用于解析表达式、收集依赖、当依赖项变化时触发回调。例如开发Vue组件时常用的watch和computed，他们都是通过对应的Watcher对象来维护依赖项和重新计算值的。具体对应关系如下：
 
-* 每个watch会对应一个watcher对象；
-* 每个computed会对应一个watcher对象；
+* 每个watch选项会对应一个watcher对象；
+* 每个computed选项会对应一个watcher对象；
 * 组件内部会维护一个私有\_watcher对象用于更新组件；
 * 组件内部会维护一个watcher数组，包括组件所有watcher对象；
 
-当为代理的属性赋值时，对应set函数内部会先进行一系列判断，如果值有变化最终会调用 Dep对象的notify\(\)方法通知依赖的观察者（Watcher对象），而在Watcher对象内部会通过update\(\)函数进行后续一些列的更新操作。
+当通过属性描述符set函数进行赋值时，内部会先进行一系列判断，如果值有变化最终会调用 Dep对象的notify\(\)方法通知依赖的观察者（Watcher对象）进行更新操作，而在Watcher对象内部会通过update\(\)函数进行后续一些列的更新操作。
 
 {% code-tabs %}
 {% code-tabs-item title="src/core/observer/watcher.js" %}
@@ -378,9 +397,9 @@ export default class Watcher {
 {% endcode-tabs-item %}
 {% endcode-tabs %}
 
-通过Watcher源码分析，能解释很多Vue官方的文档和api，例如$watch函数的内部实现，计算属性等等。留两个思考问题：
+通过Watcher源码分析，能解释很多Vue官方的文档和api，例如$watch函数的内部实现，计算属性等等。留几个思考问题：
 
-* $watch内部实现，以及怎么取消观察的？
+* $watch内部实现，以及返回的函数时怎么取消观察的？
 * 计算属性是如何实现惰性计算和缓存的？
 
 ### Watcher更新队列
