@@ -1,7 +1,3 @@
----
-description: 这边文章主要分析下Vue中的侦听器是怎么处理的。
----
-
 # 侦听器（watch）
 
 > Vue中的[watch](https://cn.vuejs.org/v2/guide/computed.html#%E4%BE%A6%E5%90%AC%E5%99%A8)用来响应数据的变化。当需要在数据变化时执行异步或开销较大的操作时，这个方式是最有用的。

@@ -1,8 +1,10 @@
 ---
-description: 在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
+description: 'https://cn.vuejs.org/v2/api/#Vue-nextTick'
 ---
 
 # Vue.nextTick
+
+> Vue.nextTick在下次 DOM 更新循环结束之后执行延迟回调。在修改数据之后立即使用这个方法，获取更新后的 DOM。
 
 Vue.nextTick内部使用了一个回调队列（[Vue异步更新队列](https://cn.vuejs.org/v2/guide/reactivity.html#%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0%E9%98%9F%E5%88%97)），并会区分宏任务和微任务来执行回调函数；自2.1.0起，在没有提供回调和支持Promise的环境中会返回一个Promise.
 

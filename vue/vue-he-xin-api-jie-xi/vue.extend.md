@@ -1,10 +1,10 @@
 ---
-description: Vue.extend主要用于类继承。
+description: 'https://cn.vuejs.org/v2/api/#Vue-extend'
 ---
 
 # Vue.extend
 
-> 使用基础 Vue 构造器，创建一个“子类”。参数是一个包含组件选项的对象。
+> Vue.extend使用基础 Vue 构造器，创建一个“子类”。参数是一个包含组件选项的对象。
 >
 > `data` 选项是特例，需要注意 - 在 `Vue.extend()` 中它必须是函数。
 
