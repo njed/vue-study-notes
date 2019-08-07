@@ -2,7 +2,7 @@
 
 vue组件的实例化过程主要涉及到src/core/instance/init.js文件。主要包括以下加个过程：
 
-![](../.gitbook/assets/image.png)
+![](../.gitbook/assets/image%20%285%29.png)
 
 ### 1、$options合成
 
