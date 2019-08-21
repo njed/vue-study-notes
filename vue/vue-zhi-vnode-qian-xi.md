@@ -96,7 +96,7 @@ export default class VNode {
 
 ### VNode实例生成过程
 
-![\_render&#x51FD;&#x6570;&#x8C03;&#x7528;&#x6808;](../.gitbook/assets/image%20%2810%29.png)
+![\_render&#x51FD;&#x6570;&#x8C03;&#x7528;&#x6808;](../.gitbook/assets/image%20%2814%29.png)
 
 
 
@@ -107,7 +107,7 @@ export default class VNode {
 * createElm会递归生成dom元素，然后一次性挂载；
 * patchVnode会递归对比VNode，只有不同的虚拟节点才会被处理更新dom；
 
-![\_update&#x8C03;&#x7528;&#x6D41;&#x7A0B;&#x56FE;](../.gitbook/assets/image%20%284%29.png)
+![\_update&#x8C03;&#x7528;&#x6D41;&#x7A0B;&#x56FE;](../.gitbook/assets/image%20%285%29.png)
 
 ### Vue内部VNode更新操作
 
@@ -140,7 +140,7 @@ export default {
 
 如果针对上面列表执行选项删除操作，大致的行为如下图所示：
 
-![&#x9009;&#x9879;&#x64CD;&#x4F5C;&#x6267;&#x884C;&#x8FC7;&#x7A0B;](../.gitbook/assets/image%20%283%29.png)
+![&#x9009;&#x9879;&#x64CD;&#x4F5C;&#x6267;&#x884C;&#x8FC7;&#x7A0B;](../.gitbook/assets/image%20%284%29.png)
 
 Vue内部通过Virtual Node的diff算法会对内存在的VNode实例进行对比，过滤掉相同节点，以减少不必要的dom更新操作。Vue内部实现主要涉及patchVnode、updateChildren和sameVnode三个主要的函数。
 

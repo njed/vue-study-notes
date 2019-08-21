@@ -1,12 +1,15 @@
 # Table of contents
 
 * [简介](README.md)
-* [搭建前端工程](da-jian-qian-duan-gong-cheng/README.md)
-  * [使用脚手架](da-jian-qian-duan-gong-cheng/jiao-shou-jia.md)
+* [搭建工程](da-jian-qian-duan-gong-cheng.md)
 * [规范的重要性](gui-fan-xie-zai-qian.md)
 * [工程优化](gong-cheng-you-hua/README.md)
   * [构建优化](gong-cheng-you-hua/da-bao-you-hua.md)
   * [性能优化](gong-cheng-you-hua/xiang-mu-xing-neng-you-hua.md)
+* [Vue组件](vue-zu-jian/README.md)
+  * [如何编写高质量组件](vue-zu-jian/bian-xie-vue-zu-jian.md)
+  * [Vue组件通信](vue-zu-jian/vue-zu-jian-tong-xin.md)
+  * [HOC组件](vue-zu-jian/hoc-zu-jian.md)
 * [Vue中v-if、v-else和v-for的关系](vue-zhong-yi-xie-qi-guai-de-luo-ji.md)
 * [Vue源码分析](vue/README.md)
   * [组件实例化过程](vue/vueshi-li-hua-guo-cheng.md)
