@@ -14,7 +14,7 @@ description: 规范可以统一团队成员的编码习惯，使项目的编码�
 
 按照规范编码最直接的结果就是项目结构和代码风格在视觉上带来的高度一致性，可读性等。当你去维护别人编写的代码时，至少看起来不会难受，对于有强迫症的程序员更是灾难！看下面[google的风格指南](https://google.github.io/styleguide/htmlcssguide.html#HTML_Line-Wrapping)。
 
-![styleguide](.gitbook/assets/image%20%2811%29.png)
+![styleguide](.gitbook/assets/image%20%2812%29.png)
 
 上面的编码风格都没问题，笔者所在团队成员对每种风格都有支持者，这和个人审美有关，不能说谁对谁错。但是在一个项目中如果不统一风格就会造成你看我的代码难受，我看你的也难受，影响团队成员间的合作。
 

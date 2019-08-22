@@ -43,11 +43,11 @@ var render = function() {
 
 从上面代码看到当i等于3的时候会通过\_vm.\_l生成包含三个元素的数组且tag是span，等等，不是说渲染结果是1 2 undefined吗，要打自己的脸？让我静一会，肯定哪里处理问题，render函数是干什么的，生成VNode实例的，但是VNode实例不是和真实dom对应的吗？那看下传入\_update函数的vnode到底怎么了？
 
-![\_render&#x51FD;&#x6570;&#x751F;&#x6210;&#x7684;VNode&#x5B9E;&#x4F8B;](.gitbook/assets/image%20%2810%29.png)
+![\_render&#x51FD;&#x6570;&#x751F;&#x6210;&#x7684;VNode&#x5B9E;&#x4F8B;](.gitbook/assets/image%20%2811%29.png)
 
 没毛病，是生成了五个VNode实例啊，等等，children的第三个元素是数组，发现情况有点不妙！莫不是这种数据格式有问题，再进一步跟踪下：
 
-![createElm&#x51FD;&#x6570;&#x5185;&#x90E8;&#x903B;&#x8F91;](.gitbook/assets/image%20%289%29.png)
+![createElm&#x51FD;&#x6570;&#x5185;&#x90E8;&#x903B;&#x8F91;](.gitbook/assets/image%20%2810%29.png)
 
 当对children进行遍历更新的时候，额，你竟然是个数组，我不认得你啊。vnode.text不就是undefined嘛！我没错！！！好吧，\_render函数没问题，能按照代码逻辑生成VNode实例和子节点实例，但是\_update函数不支持啊。
 
