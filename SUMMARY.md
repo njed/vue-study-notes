@@ -8,7 +8,7 @@
   * [如何编写高质量组件](vue-zu-jian/bian-xie-vue-zu-jian.md)
   * [Vue组件通信](vue-zu-jian/vue-zu-jian-tong-xin.md)
   * [HOC组件](vue-zu-jian/hoc-zu-jian.md)
-* [谈谈组件该如何存取数据](tan-tan-zu-jian-gai-ru-he-cun-qu-shu-ju.md)
+* [谈谈组件如何维护状态](tan-tan-zu-jian-gai-ru-he-cun-qu-shu-ju.md)
 * [工程优化](gong-cheng-you-hua/README.md)
   * [构建优化](gong-cheng-you-hua/da-bao-you-hua.md)
   * [性能优化](gong-cheng-you-hua/xiang-mu-xing-neng-you-hua.md)
