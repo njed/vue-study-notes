@@ -3,7 +3,7 @@
 * [简介](README.md)
 * [搭建工程](da-jian-qian-duan-gong-cheng.md)
 * [规范的重要性](gui-fan-xie-zai-qian.md)
-* [组件](vue-zu-jian/README.md)
+* [Vue组件](vue-zu-jian/README.md)
   * [初识Vue组件](vue-zu-jian/chu-shi-vue-zu-jian.md)
   * [如何编写高质量组件](vue-zu-jian/bian-xie-vue-zu-jian.md)
   * [Vue组件通信](vue-zu-jian/vue-zu-jian-tong-xin.md)

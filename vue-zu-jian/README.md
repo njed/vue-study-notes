@@ -2,7 +2,7 @@
 description: Vue组件是开发者
 ---
 
-# 组件
+# Vue组件
 
 ## 组件的演变
 
