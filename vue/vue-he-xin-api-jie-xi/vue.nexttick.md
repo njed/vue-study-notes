@@ -8,8 +8,7 @@ description: 'https://cn.vuejs.org/v2/api/#Vue-nextTick'
 
 Vue.nextTick内部使用了一个回调队列（[Vue异步更新队列](https://cn.vuejs.org/v2/guide/reactivity.html#%E5%BC%82%E6%AD%A5%E6%9B%B4%E6%96%B0%E9%98%9F%E5%88%97)），并会区分宏任务和微任务来执行回调函数；自2.1.0起，在没有提供回调和支持Promise的环境中会返回一个Promise.
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/util/next-tick.js" %}
+{% code title="src/core/util/next-tick.js" %}
 ```javascript
 export function nextTick (cb?: Function, ctx?: Object) {
   let _resolve
@@ -40,8 +39,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## 什么宏任务和微任务？
 
@@ -54,8 +52,7 @@ export function nextTick (cb?: Function, ctx?: Object) {
 
 Vue中对于宏任务的执行函数优先级为：setImmediate &gt; MessageChannel &gt; setTimeout；而对于微任务的执行函数则Promise，对于不支持的浏览器降级为宏任务；
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/util/next-tick.js" %}
+{% code title="src/core/util/next-tick.js" %}
 ```javascript
 const callbacks = []
 let pending = false
@@ -140,6 +137,5 @@ export function withMacroTask (fn: Function): Function {
 }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

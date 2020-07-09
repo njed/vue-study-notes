@@ -4,8 +4,7 @@
 
 Vue内部会为每个计算属性创建一个Watcher对象，并配置为lazy: true。这些Watcher对象被组件私有属性\_computedWatchers维护。计算属性不会因此直接进行计算，会被延迟到使用的时候才会真正计算，而且缓存结果（依赖项变化才会重新计算），因此计算属性比直接使用方法在性能上有明显的优势。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/intance/state.js" %}
+{% code title="src/core/intance/state.js" %}
 ```javascript
 const computedWatcherOptions = { lazy: true }
 
@@ -49,13 +48,11 @@ function initComputed (vm: Component, computed: Object) {
     }
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 Vue内部对props和computed对象都做了特殊处理，就是在使用Vue.extend继承生成组件类的时候，会把计算属性优先代理（getter/setter）到组件原型上，可以避免在组件实例化（initComputed）的时候为每个实例调用Object.defineProperty。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/global-api/extend.js" %}
+{% code title="src/core/global-api/extend.js" %}
 ```javascript
 function initComputed (Comp) {
   const computed = Comp.options.computed
@@ -64,13 +61,11 @@ function initComputed (Comp) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 当计算属性为函数，或使用getter/setter且cache为真的情况下（是的，还可以传入cache），这个时候会通过createComptedGetter函数生成一个新的替代自定义函数或getter函数的函数，该函数内部就使用了\_computedWatchers对象获取对应Watcher对象来获取计算值。此时应该明白计算属性是如何实现缓存的了吧，答案就是计算属性对应的Watcher对象。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/state.js" %}
+{% code title="src/core/instance/state.js" %}
 ```javascript
 export function defineComputed (
   target: any,
@@ -120,6 +115,5 @@ function createComputedGetter (key) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

@@ -4,8 +4,7 @@
 
 回顾一下Watcher类章节的内容，当依赖变化时会调用Watcher类的update方法，而此方法在判断状态非延迟和同步的情况下，会通过queueWatcher函数将自身添加到Watcher队列中。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
  /**
    * Subscriber interface.
@@ -22,8 +21,7 @@
     }
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Watcher队列
 
@@ -33,8 +31,7 @@ Yes, after a few months we finally found the answer. Sadly, Mike is on vacations
 
 queueWatcher函数添加一个Watcher对象到队列中，如果队列空闲则直接添加队列后面；否则会遍历队列根据id值，把新增加的Watcher对象添加到合适的位置。然后判断是否需要刷新队列。队列是通过nextTick函数执行的（详情参考Vue.nextTick章节）。因此在队列真正被执行前可以继续添加Watcher对象。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/scheduler.js" %}
+{% code title="src/core/observer/scheduler.js" %}
 ```javascript
 /**
  * Push a watcher into the watcher queue.
@@ -69,8 +66,7 @@ export function queueWatcher (watcher: Watcher) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### flushSchedulerQueue函数
 
@@ -84,8 +80,7 @@ export function queueWatcher (watcher: Watcher) {
 
 排序完成就是遍历Watcher，执行其before和run方法。在开发模式下还会判断是否存在循环更新，判断逻辑是在不存在的情况下，该Watcher被遍历执行超过设置的最大阀值则任务存在循环（MAX\_UPDATE\_COUNT=100）。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/scheduler.js" %}
+{% code title="src/core/observer/scheduler.js" %}
 ```javascript
 export const MAX_UPDATE_COUNT = 100
 
@@ -170,15 +165,13 @@ function flushSchedulerQueue () {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## 组件activated事件钩子
 
 在队列列表遍历结束后，会调用callActivatedHooks函数，执行"activated"事件钩子函数。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/scheduler.js" %}
+{% code title="src/core/observer/scheduler.js" %}
 ```javascript
 /**
  * Queue a kept-alive component that was activated during patch.
@@ -198,15 +191,13 @@ function callActivatedHooks (queue) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## 组件updated事件钩子
 
 另外组件的“updated“事件钩子函数也是在flushSchedulerQueue函数中通过callUpdatedHooks函数触发的。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/scheduler.js" %}
+{% code title="src/core/observer/scheduler.js" %}
 ```javascript
 function callUpdatedHooks (queue) {
   let i = queue.length
@@ -219,11 +210,9 @@ function callUpdatedHooks (queue) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/lifecycle.js" %}
+{% code title="src/core/instance/lifecycle.js" %}
 ```javascript
 export function activateChildComponent (vm: Component, direct?: boolean) {
   if (direct) {
@@ -243,6 +232,5 @@ export function activateChildComponent (vm: Component, direct?: boolean) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

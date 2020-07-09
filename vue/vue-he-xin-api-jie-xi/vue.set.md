@@ -8,8 +8,7 @@ Vue.set内部通过defineReactive为target添加新属性，并通过target.\_\_
 
 **思考：Vue.set设置新属性时，是如何通知更新视图的？**
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/index.js" %}
+{% code title="src/core/observer/index.js" %}
 ```javascript
 /**
  * Set a property on an object. Adds the new property and
@@ -49,8 +48,7 @@ export function set (target: Array<any> | Object, key: any, val: any): any {
 }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 
 

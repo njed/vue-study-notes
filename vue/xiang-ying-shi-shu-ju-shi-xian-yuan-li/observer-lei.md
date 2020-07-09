@@ -12,8 +12,7 @@ description: 响应式数据核心Observer类。
 
 3、当通过Vue.set为目标观察对象添加新属性时，会通过\_\_ob\_\_对象维护的Dep对象通知观察者更新视图。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/index.js" %}
+{% code title="src/core/observer/index.js" %}
 ```javascript
 /**
  * Observer class that is attached to each observed
@@ -66,6 +65,5 @@ export class Observer {
 }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

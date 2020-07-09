@@ -16,8 +16,7 @@ Vue内部会维护一个虚拟DOM来对应Vue组件树，虚拟DOM的存在主�
 
 Vue内部使用VNode实例来维护虚拟节点，当数据变化时会通过vm.\_watcher来更新组件，更新组件时会先调用\_render方法来生成新的VNode实例，然后通过新旧虚拟节点的比较找出差异，并更新视觉。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/vdom/vnode.js" %}
+{% code title="src/core/vdom/vnode.js" %}
 ```javascript
 export default class VNode {
   tag: string | void;
@@ -89,8 +88,7 @@ export default class VNode {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 还记得在使用v-for指令时，
 
@@ -154,8 +152,7 @@ sameVnode函数主要用于判断两个vnode实例是否相同，它会优先判
 
 **思考：使用v-for指令时，设置key值带来的好处是什么？**
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/vdom/patch.js" %}
+{% code title="src/core/vdom/patch.js" %}
 ```javascript
 function sameVnode (a, b) {
   return (
@@ -175,13 +172,11 @@ function sameVnode (a, b) {
   )
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### patchVnode函数
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/vdom/patch.js" %}
+{% code title="src/core/vdom/patch.js" %}
 ```javascript
   function patchVnode (oldVnode, vnode, insertedVnodeQueue, removeOnly) {
     if (oldVnode === vnode) {
@@ -243,8 +238,7 @@ function sameVnode (a, b) {
     }
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### updateChildren函数
 

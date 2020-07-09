@@ -19,8 +19,7 @@ Watcher内部维护了deps和newDeps两个数组，这两个数组共同维护�
 
 Watcher内部还维护了一个自然增长的id值。**这个id有什么用呢？**
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
 
   constructor (
@@ -76,15 +75,13 @@ Watcher内部还维护了一个自然增长的id值。**这个id有什么用呢�
       : this.get()
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 表达式解析
 
 Watcher对象是通过内部的get函数来更新和获取value值的，而get函数内部又是通过Watcher对象内部的getter函数来生成value值的。表达式解析就是要生成一个正确的getter函数。如果构造函数传进来的expOrFn本事就是函数，那就直接赋值给getter，否则就通过parsePath函数生成一个getter函数。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/util/lang.js" %}
+{% code title="src/core/util/lang.js" %}
 ```javascript
 /**
  * Parse simple path.
@@ -104,8 +101,7 @@ export function parsePath (path: string): any {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ## Watcher类核心方法
 
@@ -120,8 +116,7 @@ export function parsePath (path: string): any {
 
 #### 思考为什么要重新收集依赖？
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
   /**
    * Evaluate the getter, and re-collect dependencies.
@@ -150,8 +145,7 @@ export function parsePath (path: string): any {
     return value
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### Watcher之update函数
 
@@ -161,8 +155,7 @@ export function parsePath (path: string): any {
 
 #### 哪些侦听器设置了sync？
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
   /**
    * Subscriber interface.
@@ -179,13 +172,11 @@ export function parsePath (path: string): any {
     }
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### Watcher之run函数
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
   /**
    * Scheduler job interface.
@@ -218,8 +209,7 @@ export function parsePath (path: string): any {
     }
   }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 
 

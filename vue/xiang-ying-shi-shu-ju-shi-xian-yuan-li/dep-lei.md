@@ -12,8 +12,7 @@ Dep对象的作用就是在属性改变时通知观察者执行回调或更新�
 
 依赖收集也依赖于Dep.targat对象，同一时间只能有一个Watcher被评估，因此Watcher的get函数第一行代码就是pushTarget\(this\)，在属性的getter函数中再通过Dep.target判断来达到依赖收集的目的。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/dep.js" %}
+{% code title="src/core/observer/dep.js" %}
 ```javascript
 let uid = 0
 
@@ -78,6 +77,5 @@ export function popTarget () {
 
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

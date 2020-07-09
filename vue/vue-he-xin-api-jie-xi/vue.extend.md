@@ -14,8 +14,7 @@ Vue.extend函数就是使用基础Vue构造器创建子类，但是通过源码�
 
 **而且继承类做了缓存，，避免二次生成相同继承类。**
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/global-api/extend.js" %}
+{% code title="src/core/global-api/extend.js" %}
 ```javascript
   /**
    * Class inheritance
@@ -84,6 +83,5 @@ Vue.extend函数就是使用基础Vue构造器创建子类，但是通过源码�
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

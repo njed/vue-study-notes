@@ -24,8 +24,7 @@ description: 学习和分析Vue内部的响应式数据的实现原理和相关�
 
 思考：如何避免不必要的依赖收集？
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/index.js" %}
+{% code title="src/core/observer/index.js" %}
 ```javascript
 export function defineReactive (
   obj: Object,
@@ -88,8 +87,7 @@ export function defineReactive (
   })
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 总结一下defineReactive函数的作用：
 
@@ -116,8 +114,7 @@ Vue3应该会采用新规范的Proxy实现数据的代理拦截，Proxy在性能
 
 在Vue内部使用Dep类表示依赖，每个被代理的属性都对应一个Dep对象，每个Dep对象内又保存了一个Watcher数组，在上述get函数中通过Dep对象的depend\(\)函数，双向绑定Dep和Watcher对象。从Dep类的设计上能明显的看出这是一个观察者模式的实现，当属性改变时通过Dep对象去通知Watcher对象进行更新操作。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/dep.js" %}
+{% code title="src/core/observer/dep.js" %}
 ```javascript
 export default class Dep {
   static target: ?Watcher;
@@ -158,8 +155,7 @@ export default class Dep {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 #### 依赖收集：Watcher类
 
@@ -172,8 +168,7 @@ Vue中的Watcher类用于解析表达式、收集依赖、当依赖项变化时�
 
 当通过属性描述符set函数进行赋值时，内部会先进行一系列判断，如果值有变化最终会调用 Dep对象的notify\(\)方法通知依赖的观察者（Watcher对象）进行更新操作，而在Watcher对象内部会通过update\(\)函数进行后续一些列的更新操作。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
 export default class Watcher {
   vm: Component;
@@ -394,8 +389,7 @@ export default class Watcher {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 通过Watcher源码分析，能解释很多Vue官方的文档和api，例如$watch函数的内部实现，计算属性等等。留几个思考问题：
 
@@ -406,8 +400,7 @@ export default class Watcher {
 
 上一小节贴出的Watcher源码中如果仔细看update函数，会发现如果状态lazy为真的话，内部只是把dirty标记为true而已，并没有做任何别的事情，这个场景是和computed配合使用的；第二种情况是状态sync为真则直接调用run函数，run函数是真正执行计算和调用回调函数的地方；重点看下不满足上述两种的情况的时候其实是使用了队列来实现更新操作的。Vue的Watcher更新队列详情参考：Watcher更新队列章节。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/observer/watcher.js" %}
+{% code title="src/core/observer/watcher.js" %}
 ```javascript
   /**
    * Subscriber interface.
@@ -425,8 +418,7 @@ export default class Watcher {
   }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 通过VNode优化DOM更新
 

@@ -14,8 +14,7 @@
 
 ## 参考element-ui的emitter实现
 
-{% code-tabs %}
-{% code-tabs-item title="emitter.js" %}
+{% code title="emitter.js" %}
 ```javascript
 function broadcast(componentName, eventName, params) {
   this.$children.forEach(child => {
@@ -51,6 +50,5 @@ export default {
   }
 };
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

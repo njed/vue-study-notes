@@ -4,8 +4,7 @@
 
 从下面的initWatch函数中可以监听器的回调函数可以是一个数组，并且在createWatcher内部也是通过$watch函数来添加监听器的。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/state.js" %}
+{% code title="src/core/instance/state.js" %}
 ```javascript
 function initWatch (vm: Component, watch: Object) {
   for (const key in watch) {
@@ -36,13 +35,11 @@ function createWatcher (
   return vm.$watch(expOrFn, handler, options)
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 重点看下$watch函数内是如何实现添加监听器的。主要是通过Watcher类创建了一个观察者对象，并返回取消观察的unwatchFn函数，在看下unwatchFn函数，内部只是执行了前面生成的watcher.teardown函数。仔细看下代码，就能知道为什么存在immediate时，不能在第一次回调中取消侦听了，因为第一次回调是在$watch没返回之前执行的，此时unwatchFn并不存在。
 
-{% code-tabs %}
-{% code-tabs-item title="src/conre/instance/state.js" %}
+{% code title="src/conre/instance/state.js" %}
 ```javascript
   Vue.prototype.$watch = function (
     expOrFn: string | Function,
@@ -65,6 +62,5 @@ function createWatcher (
   }
 
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

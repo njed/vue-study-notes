@@ -14,8 +14,7 @@ description: 主要介绍和分析如何跨组件传递slot内容。
 
 ### template语法实现
 
-{% code-tabs %}
-{% code-tabs-item title="CompA.vue" %}
+{% code title="CompA.vue" %}
 ```javascript
 <template>
   <div>
@@ -32,13 +31,11 @@ export default {
 }
 </script>
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 #### 如何让组件CompB支持组件CompA的slot？
 
-{% code-tabs %}
-{% code-tabs-item title="CompB.vue" %}
+{% code title="CompB.vue" %}
 ```javascript
 <template>
   <comp-a>
@@ -61,15 +58,13 @@ export default {
 }
 </script>
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 跨组件传递默认slot：很简单，和正常的一样，只是此时CompB会丧失自身默认slot的能力，因为父组件向CompB组件传递的默认slot其实是传递给了CompA；
 
 跨组件传递具名slot：具名slot的此时的声明比较特殊，需要同时使用name和slot字段，name就是普通的slot名字，slot字段此时对应CompA的具名slot。在CompB中声明的跨组件slot名称一般和CompA中的slot名称保持一致；
 
-{% code-tabs %}
-{% code-tabs-item title="CompC.vue" %}
+{% code title="CompC.vue" %}
 ```javascript
 <template>
   <comp-b>
@@ -90,8 +85,7 @@ export default {
 }
 </script>
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 组件CompB跨组件的slot，对于父组件CompC而言是无感知，在组件CompC中正常的向组件CompB传递slot，只是传递的slot会穿透CompB传递给组件CompA。
 
@@ -101,8 +95,7 @@ export default {
 
 #### 使用render函数改造CompB函数
 
-{% code-tabs %}
-{% code-tabs-item title="CompB.vue" %}
+{% code title="CompB.vue" %}
 ```javascript
 <script>
 import CompA from './CompA'
@@ -119,15 +112,13 @@ export default {
 }
 </script>
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 #### 理解vm.\_t函数
 
 > \_t函数是Vue内部渲染slot的私有的运行时函数。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/render-helpers/render-slot.js" %}
+{% code title="src/core/instance/render-helpers/render-slot.js" %}
 ```javascript
 /* @flow */
 
@@ -180,6 +171,5 @@ export function renderSlot (
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 

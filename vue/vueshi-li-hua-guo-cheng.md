@@ -12,8 +12,7 @@ vue内部对$options的合成是区分内部组件和自定义组件的，并对
 
 #### 内部组件$options优化合并
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/init.js" %}
+{% code title="src/core/instance/init.js" %}
 ```javascript
 function initInternalComponent (vm: Component, options: InternalComponentOptions) {
   const opts = vm.$options = Object.create(vm.constructor.options)
@@ -34,15 +33,13 @@ function initInternalComponent (vm: Component, options: InternalComponentOptions
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 #### 自定义组件$options动态合并
 
 先通过resolveConstructorOptions处理构造器选项，并会递归处理父组件选项。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/init.js" %}
+{% code title="src/core/instance/init.js" %}
 ```javascript
 function resolveConstructorOptions (Ctor: Class<Component>) {
   let options = Ctor.options
@@ -68,13 +65,11 @@ function resolveConstructorOptions (Ctor: Class<Component>) {
   return options
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 再通过mergeOptions函数进行选项动态合并。从代码中可以看到，对自定义选项中的extends和mixins字段会进行递归合并。其中又涉及到不同属性值的合并策略问题，比如data、props、methods、watch、声明周期钩子函数等等。详情参见[深入Vue属性合并策略](shen-ru-vue-shu-xing-he-bing-ce-lve/)。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/util/options.js" %}
+{% code title="src/core/util/options.js" %}
 ```javascript
 function mergeOptions (
   parent: Object,
@@ -118,8 +113,7 @@ function mergeOptions (
   return options
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 总结：
 
@@ -132,8 +126,7 @@ function mergeOptions (
 * 初始化$children、$refs属性值；
 * 初始化实例内部属性值和相关状态；
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/lifecycle.js" %}
+{% code title="src/core/instance/lifecycle.js" %}
 ```javascript
 function initLifecycle (vm: Component) {
   const options = vm.$options
@@ -161,15 +154,13 @@ function initLifecycle (vm: Component) {
   vm._isBeingDestroyed = false
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 3、初始化相关事件\(initEvents\)
 
 此过程主要初始化父组件的一些附加事件，事件来源是$options.\_parentListeners。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/events.js" %}
+{% code title="src/core/instance/events.js" %}
 ```javascript
 function initEvents (vm: Component) {
   vm._events = Object.create(null)
@@ -201,11 +192,9 @@ function updateComponentListeners (vm: Component, listeners: Object, oldListener
   target = undefined
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/vdom/helpers/update-listeners.js" %}
+{% code title="src/core/vdom/helpers/update-listeners.js" %}
 ```javascript
 function updateListeners (
   on: Object,
@@ -247,8 +236,7 @@ function updateListeners (
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 4、初始化渲染函数\(initRender\)
 
@@ -259,8 +247,7 @@ function updateListeners (
 
 内部使用的\_c和对外暴露的$createElement函数内部都是使用createElement函数，仅最后一个参数不同而已。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/render.js" %}
+{% code title="src/core/instance/render.js" %}
 ```javascript
 function initRender (vm: Component) {
   vm._vnode = null // the root of the child tree
@@ -297,8 +284,7 @@ function initRender (vm: Component) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 5、触发beforeCreate钩子函数
 
@@ -309,8 +295,7 @@ provide/inject是 Vue2.2.0新增的特性，主要为高阶插件和组件库提
 * 对inject选项进行遍历，然后通过父组件是否存在provide，并提供了对应选项；
 * 处理inject对象，使其变成响应式数据；
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/inject.js" %}
+{% code title="src/core/instance/inject.js" %}
 ```javascript
 function initInjections (vm: Component) {
   const result = resolveInject(vm.$options.inject, vm)
@@ -335,8 +320,7 @@ function initInjections (vm: Component) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ```javascript
 function resolveInject (inject: any, vm: Component): ?Object {
@@ -381,8 +365,7 @@ function resolveInject (inject: any, vm: Component): ?Object {
 
 初始化顺序props-&gt;methods-&gt;data-&gt;computed-&gt;watch。
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/state.js" %}
+{% code title="src/core/instance/state.js" %}
 ```javascript
 function initState (vm: Component) {
   vm._watchers = []
@@ -400,13 +383,11 @@ function initState (vm: Component) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 8、初始化\(initProvide\)
 
-{% code-tabs %}
-{% code-tabs-item title="src/core/instance/inject.js" %}
+{% code title="src/core/instance/inject.js" %}
 ```javascript
 function initProvide (vm: Component) {
   const provide = vm.$options.provide
@@ -417,8 +398,7 @@ function initProvide (vm: Component) {
   }
 }
 ```
-{% endcode-tabs-item %}
-{% endcode-tabs %}
+{% endcode %}
 
 ### 9、触发created钩子函数
 
