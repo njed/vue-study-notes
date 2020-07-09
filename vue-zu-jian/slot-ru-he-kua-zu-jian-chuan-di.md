@@ -8,13 +8,19 @@ description: 主要介绍和分析如何跨组件传递slot内容。
 
 > [`<slot>`](https://cn.vuejs.org/v2/api/?#slot) 元素作为组件模板之中的内容分发插槽。`<slot>` 元素自身将被替换。
 
-## slot跨组件传递
+Vue的插槽详细说明和用法请参考[官方文档](https://cn.vuejs.org/v2/guide/components-slots.html)，本篇文章主要讨论跨组件传递slot的实现方式和用途。
 
-跨组件的slot的引用场景，一般为包装组件\(CompWrapper\)包装了具体的组件\(Comp\)，一提供个性化的功能，而又不想丢失Comp提供的slot能力，那就需要CompWrapper提供slot穿透的能力，将slot透传给Comp。
+## slot跨组件传递使用场景
+
+跨传递slot一般的使用场景为包装组件需要保留原组件的slot功能。那么就需要CompWrapper跨组件传递slot了。
+
+## slot跨组件传递实现方式
+
+实现方式有多种，包括但不仅限于template、scopedSlots以及直接使用slot渲染函数实现。在版本2.6.0及以上，Vue对slot和scopedSlot做了统一，新增了v-slot指令。
 
 ### template语法实现
 
-{% code title="CompA.vue" %}
+{% code title="Comp.vue" %}
 ```javascript
 <template>
   <div>
@@ -27,86 +33,117 @@ description: 主要介绍和分析如何跨组件传递slot内容。
 
 <script>
 export default {
-  name: 'CompA'
+  name: 'Comp'
 }
 </script>
 ```
 {% endcode %}
 
-#### 如何让组件CompB支持组件CompA的slot？
+#### 如何让组件CompWrapper支持组件Comp的slot？
 
-{% code title="CompB.vue" %}
+{% code title="CompWrapper.vue" %}
 ```javascript
 <template>
-  <comp-a>
+  <comp>
     <!-- 传递default slot -->
     <slot></slot>
     <!-- 传递test slot -->
     <slot name="test" slot="test"></slot>
-  </comp-a>
+  </comp>
 </template>
 
 <script>
-import CompA from './CompA'
+import Comp from './Comp'
 
 export default {
-  name: 'CompB',
+  name: 'CompWrapper',
   
   components: {
-    CompA 
+    Comp
   }
 }
 </script>
 ```
 {% endcode %}
 
-跨组件传递默认slot：很简单，和正常的一样，只是此时CompB会丧失自身默认slot的能力，因为父组件向CompB组件传递的默认slot其实是传递给了CompA；
+跨组件传递默认slot很简单，只需将默认slot作为Comp的子节点即可，只是此时CompWrapper会丧失自身默认slot的能力，因为向CompWrapper组件传递的默认slot其实是传递给了Comp；
 
-跨组件传递具名slot：具名slot的此时的声明比较特殊，需要同时使用name和slot字段，name就是普通的slot名字，slot字段此时对应CompA的具名slot。在CompB中声明的跨组件slot名称一般和CompA中的slot名称保持一致；
+跨组件传递具名slot的声明比较特殊，需要同时使用name和slot字段，name就是普通的slot名字，slot字段此时对应Comp的具名slot。在CompWrapper中声明的跨组件slot名称一般和Comp中的slot名称保持一致；
 
-{% code title="CompC.vue" %}
+{% code title="Test.vue" %}
 ```javascript
 <template>
-  <comp-b>
+  <comp-wrapper>
     <span>default slot</span>
     <span slot="test">test slot</span>
-  </comp-b>
+  </comp-wrapper>
 </template>
 
 <script>
-import CompB from './CompB'
+import CompWrapper from './CompWrapper'
 
 export default {
-  name: 'CompC',
+  name: 'Test',
   
   components: {
-    CompB 
+    CompWrapper
   }
 }
 </script>
 ```
 {% endcode %}
 
-组件CompB跨组件的slot，对于父组件CompC而言是无感知，在组件CompC中正常的向组件CompB传递slot，只是传递的slot会穿透CompB传递给组件CompA。
+组件CompWrapper跨组件的slot，对于使用组件Test而言是无感知的，在组件Test中正常的向组件CompWrapper传递slot，只是传递的slot会穿透CompWrapper传递给组件Comp。
 
-### render函数实现
+### scopedSlots实现
 
-如上使用template语法实现了slot跨组件传递，那如果使用render函数来实现，又该如何处理呢？
+借助官方提供的scopedSlots，也可以很简单的实现跨组件传递slot，只是在生成对应slot的时候需要判断对应的slot函数是否存在，因为在使用组件中没有向CompWrapper传递slot的话，$scopedSlots中是不会存在对应slot函数。
 
-#### 使用render函数改造CompB函数
-
-{% code title="CompB.vue" %}
+{% code title="CompWrapper.vue" %}
 ```javascript
 <script>
-import CompA from './CompA'
+import Comp from './Comp'
 
 export default {
+  name: 'CompWrapper',
+  
+  render (h) {
+    const ss = this.$scopedSlots
+    
+    h(CompA, {
+      scopedSlots: {
+        default (props) {
+          return ss.default ? ss.default(props) : '插槽默认值'
+        },
+        test (props) {
+          return ss.test ? ss.test(props) : '具名插槽默认值'
+        }
+      }
+    })
+  }
+}
+</script>
+```
+{% endcode %}
+
+### slot渲染函数实现
+
+slot渲染函数不推荐使用，因为是Vue内部的私有函数不能保证在后续的版本更新中是否保持一致，this.\_t也有可能改成其它函数名。如果我们使用template实现slot，Vue也是帮我们转化为下面的slot渲染函数。
+
+{% code title="CompWrapper.vue" %}
+```javascript
+<script>
+import Comp from './Comp'
+
+export default {
+  name: 'CompWrapper',
+  
   render (h) {
     h(CompA, [
       // default slot
-      this._t('defualt'),
+      this._t('defualt', ['插槽默认值'], { ... }),
       // test slot
-      this._t('test', null, { slot: 'test' })
+      this._t('test', ['具名插槽默认值'], { ... })
     ])
   }
 }
@@ -170,6 +207,36 @@ export function renderSlot (
     return nodes
   }
 }
+```
+{% endcode %}
+
+## 解决CompWrapper组件自身slot的问题
+
+因为上面的实例会让CompWrapper组件丧失提供自身默认slot的能力，解决方案很简单就是提供一个具名slot作为Comp的默认slot。
+
+{% code title="CompWrappr.vue" %}
+```javascript
+<template>
+  <comp>
+    <!-- 传递default slot -->
+    <slot name="subDefault" slot="default"></slot>
+    <!-- 传递test slot -->
+    <slot name="test" slot="test"></slot>
+  </comp>
+</template>
+
+<script>
+import Comp from './Comp'
+
+export default {
+  name: 'CompWrapper',
+  
+  components: {
+    Comp
+  }
+}
+</script>
+
 ```
 {% endcode %}
 
